@@ -1,5 +1,5 @@
 import re
-from tokenizer import preprocessed
+from bpetokenizer import preprocessed
 
 all_tokens = sorted(set(preprocessed))
 all_tokens.extend(["<|endoftext|>", "<|unk|>"])

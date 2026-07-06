@@ -1,32 +1,33 @@
 # LLM From Scratch
 
-This project is different from the attention mechanism repo on my GitHub. That one focused on model architecture components. This one is the full thing: building a complete LLM in raw PyTorch, from raw text to a trained model that generates text.
-
-
+This project is different from the attention mechanism repo on my GitHub. That one focused on isolated model architecture components — MultiHeadAttention, FeedForward, PositionalEncoding, EncoderLayer — with no data or training around them. This one is the full thing: building a complete LLM in raw PyTorch, from raw text to a trained model that generates text. Components first, full system second.
 
 ## Roadmap
 
 - [x] Data loading and tokenization
-- [ ] Vocabulary and token IDs (special tokens, BPE)
-- [ ] Data sampling with sliding window
-- [ ] Token + positional embeddings
+- [x] Vocabulary and token IDs (special tokens, BPE)
+- [x] Data sampling with sliding window
+- [x] Token + positional embeddings
 - [ ] Causal multi-head attention
 - [ ] Full GPT architecture
 - [ ] Pretraining loop
 - [ ] Fine-tuning
 - [ ] Alignment (DPO/RLHF, beyond the book)
 
-## Current stage: tokenization
+## Files
 
-Downloads "The Verdict" (~20k chars) and splits it into ~4,690 tokens.
+- `corpus.py` — downloads "The Verdict" (~20k chars) once, exposes `raw_text` for every other file
+- `tokenizer.py` — regex word-level split, ~4,690 tokens
+- `vocabulary.py` — hand-built tokenizer with `<|unk|>` and `<|endoftext|>`, encode/decode both ways
+- `bpe_tokenizer.py` — same job with GPT-2's BPE via tiktoken, plus the input → next-token demo
+- `dataset.py` — sliding window over token IDs, PyTorch Dataset + DataLoader producing input/target pairs
+- `embeddings.py` — token embeddings + learned positional embeddings, output shape `(batch, context, 256)`
 
-```
-python tokenize.py
-```
+## Why two tokenizers
 
-Why regex instead of `str.split()`: split on whitespace alone leaves punctuation stuck to words, so "surprise," and "surprise" become two different tokens and the vocabulary doubles for nothing. The regex cuts punctuation into its own tokens. The capture group keeps the punctuation instead of throwing it away, since it carries meaning the model should see.
+Built the word-level one by hand first to hit its limits directly: vocabulary bloat (every word form is its own token) and unknown words needing `<|unk|>`. BPE solves both by splitting rare words into known pieces, so nothing is ever unknown. The hand-built one stays in the repo as the reason the second one exists.
 
-Trade-off: whitespace gets stripped, so the original text can't be rebuilt exactly. Fine for training. Also word-level tokenization means every word form is its own token — BPE fixes that in the next stage.
+Trade-off of the regex version: whitespace gets stripped, so the original text can't be rebuilt exactly. Fine for training.
 
 ## Why raw PyTorch
 
