@@ -26,3 +26,23 @@ all_context_vecs = attn_weights @ inputs
 
 
 #extend self attention mechanism with trainable weights
+x_2 = inputs[1]
+d_in = inputs.shape[1]
+d_out = 2
+
+#Next initialize the three weights matrices 
+torch.manual_seed(123)
+W_query = torch.nn.Parameter(torch.rand(d_in, d_out), requires_grad=False)
+W_key = torch.nn.Parameter(torch.rand(d_in, d_out), requires_grad=False)
+W_value = torch.nn.Parameter(torch.rand(d_in, d_out), requires_grad=False)
+
+#Next compute the query, key and value vectors
+query_2 = x_2 @ W_query
+key_2 = x_2 @ W_key
+value_2 = x_2 @ W_value
+
+keys = inputs @ W_key
+values = inputs @ W_value
+
+keys_2 = keys[1]
+attn_score_22 = query_2.dot(keys_2)
