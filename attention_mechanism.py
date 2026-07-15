@@ -46,3 +46,7 @@ values = inputs @ W_value
 
 keys_2 = keys[1]
 attn_score_22 = query_2.dot(keys_2)
+attn_scores_2 = query_2 @ keys.T
+d_k = keys.shape[-1]
+attn_weights_2 = torch.softmax(attn_scores_2 / d_k**0.5, )
+context_vec_2 = attn_weights_2 @ values
