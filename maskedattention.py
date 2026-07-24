@@ -1,4 +1,5 @@
 import torch.nn as nn 
+import torch 
 
 class CausalAttention(nn.Module):
     def __init__ (self, d_in , d_out, context_length , dropout, qkv_bias=False):
