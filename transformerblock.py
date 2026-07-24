@@ -3,6 +3,7 @@ import torch.nn as nn
 from MultiHeadAttentionWrapper import MultiHeadAttention
 from feedforward import FeedForward
 from layernorm import LayerNorm
+from gptconfig import GPT_CONFIG_124M
 class TransformerBlock(nn.Module):
     def __init__(self, cfg):
         super().__int__()
@@ -37,3 +38,12 @@ class TransformerBlock(nn.Module):
             x = self.drop_shortcut(x)
             x = x + shortcut
             return x
+
+
+torch.manual_seed(123)
+x = torch.rand(2, 4, 768)
+block = TransformerBlock(GPT_CONFIG_124M)
+output = block(x)
+
+print("Input shape:", x.shape)
+print("Output shape:", output.shape)
