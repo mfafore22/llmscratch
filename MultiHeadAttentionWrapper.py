@@ -1,8 +1,9 @@
 import torch.nn as nn
+import torch
 from maskedattention import CausalAttention
 
 class MultiHeadAttention(nn.Module):
-    def __int__(self, d_in, d_out, context_length, dropout, num_heads, qkv_bias=False):
+    def __init__(self, d_in, d_out, context_length, dropout, num_heads, qkv_bias=False):
         super().__init__()
         assert (d_out % num_heads == 0), \
              "d_out must be divisible by num_heads"
@@ -45,7 +46,7 @@ class MultiHeadAttention(nn.Module):
             attn_scores / keys.shape[-1]**0.5, dim=-1)
         attn_weights = self.dropout(attn_weights)
 
-        context_vec = (attn_weights @ values). tranpose(1, 2)
+        context_vec = (attn_weights @ values). transpose(1, 2)
 
         context_vec = context_vec.contiguous().view(
             b, num_tokens, self.d_out
