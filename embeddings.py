@@ -1,5 +1,5 @@
 import torch
-from dataset import create_dataloader_v1
+from dataset1 import create_dataloader_v1
 from corpus import raw_text
 
 vocab_size = 50257
