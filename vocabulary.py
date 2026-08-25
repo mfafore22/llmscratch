@@ -1,5 +1,8 @@
 import re
-from bpetokenizer import preprocessed
+from corpus import raw_text
+
+preprocessed = re.split(r'([,.:;?_!"()\']|--|\s)', raw_text)
+preprocessed = [item.strip() for item in preprocessed if item.strip()]
 
 all_tokens = sorted(set(preprocessed))
 all_tokens.extend(["<|endoftext|>", "<|unk|>"])

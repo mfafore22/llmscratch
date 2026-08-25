@@ -1,7 +1,6 @@
 import torch 
 import tiktoken
 from torch.utils.data import Dataset, DataLoader
-from embeddings import create_dataloader_v1
 
 class GPTDatasetV1(Dataset):
     def __init__(self, txt, tokenizer, max_length, stride):
@@ -24,21 +23,21 @@ class GPTDatasetV1(Dataset):
     
    
 
-def create__v1(txt, batch_size=4, max_length=256, 
-                             stride=128, shuffle=True, drop_last=True,
-                             num_workers=0
-                             ):
-        tokenizer = tiktoken.get_encoding("gpt2")
-        dataset = GPTDatasetV1(txt, tokenizer, max_length, stride)
-        dataloader = DataLoader(
-             dataset,
-             batch_size=batch_size,
-             shuffle=shuffle,
-             drop_last=drop_last,
-             num_workers=num_workers
-        )
+def create_dataloader_v1(txt, batch_size=4, max_length=256,
+                         stride=128, shuffle=True, drop_last=True,
+                         num_workers=0
+                         ):
+    tokenizer = tiktoken.get_encoding("gpt2")
+    dataset = GPTDatasetV1(txt, tokenizer, max_length, stride)
+    dataloader = DataLoader(
+        dataset,
+        batch_size=batch_size,
+        shuffle=shuffle,
+        drop_last=drop_last,
+        num_workers=num_workers
+    )
 
-        return dataloader
+    return dataloader
 
 if __name__ == "__main__":
      from corpus import raw_text

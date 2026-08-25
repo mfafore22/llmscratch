@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(pip install *)",
+      "Bash(python -c \"import trainmodel, calculateloss, texttotoken, generatetext, embeddings, vocabulary, dataset1, traindata, gptmodel, transformerblock; print\\('IMPORTS OK - no side effects printed above'\\)\")"
+    ]
+  }
+}

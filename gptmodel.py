@@ -34,15 +34,16 @@ class GPTModel(nn.Module):
         return logits
 
 
-torch.manual_seed(123)
-model = GPTModel(GPT_CONFIG_124M)
+if __name__ == "__main__":
+    torch.manual_seed(123)
+    model = GPTModel(GPT_CONFIG_124M)
 
-batch = torch.tensor([
-    [40, 367, 2885, 1464],
-    [367, 2885, 1464, 1807]
-])
+    batch = torch.tensor([
+        [40, 367, 2885, 1464],
+        [367, 2885, 1464, 1807]
+    ])
 
-out = model(batch)
-print("Input batch:\n" , batch)
-print("\nOutput shape:", out.shape)
-print(out)
+    out = model(batch)
+    print("Input batch:\n", batch)
+    print("\nOutput shape:", out.shape)
+    print(out)

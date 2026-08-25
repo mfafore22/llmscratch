@@ -1,8 +1,4 @@
 import torch
-import torch.nn as nn
-from gptmodel import model
-from traindata import train_loader, val_loader
-
 
 
 def calc_loss_batch(input_batch, target_batch, model, device):
@@ -31,11 +27,22 @@ def calc_loss_loader(data_loader, model, device, num_batches=None):
             break
     return total_loss / num_batches
 
-device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-model.to(device)
-with torch.no_grad():
-    train_loss = calc_loss_loader(train_loader, model, device)
-    val_loss = calc_loss_loader(val_loader, model, device)
+if __name__ == "__main__":
+    from gptmodel import GPTModel
+    from gptconfig import GPT_CONFIG_124M
+    from traindata import train_loader, val_loader
+
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    torch.manual_seed(123)
+    model = GPTModel(GPT_CONFIG_124M)
+    model.to(device)
+
+    with torch.no_grad():
+        train_loss = calc_loss_loader(train_loader, model, device)
+        val_loss = calc_loss_loader(val_loader, model, device)
+
+    print("Training loss:", train_loss)
+    print("Validation loss:", val_loss)
 
 
 

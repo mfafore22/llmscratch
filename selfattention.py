@@ -1,4 +1,5 @@
 import torch.nn as nn
+import torch
 
 class SelfAttention_v1(nn.Module):
     def __init__(self, d_in, d_out, qkv_bias=False):

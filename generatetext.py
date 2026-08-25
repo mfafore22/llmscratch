@@ -1,8 +1,4 @@
 import torch
-import torch as nn
-import tokenizer
-from gptmodel import model
-from gptconfig import GPT_CONFIG_124M
 
 
 
@@ -19,23 +15,28 @@ def generate_text_simple(model, idx, max_new_tokens, context_size):
     return idx
 
 
-start_context = "Hello. I am"
-encoded = tokenizer.encode(start_context)
-print("encoded:", encoded)
-encoded_tensor = torch.tensor(encoded).unsqueeze(0)
-print("encoded_tensor.shape:", encoded_tensor.shape)
+if __name__ == "__main__":
+    import tokenizer
+    from gpttextgeneration import model
+    from gptconfig import GPT_CONFIG_124M
 
+    start_context = "Hello. I am"
+    encoded = tokenizer.encode(start_context)
+    print("encoded:", encoded)
+    encoded_tensor = torch.tensor(encoded).unsqueeze(0)
+    print("encoded_tensor.shape:", encoded_tensor.shape)
 
-"""
-eval mode this disbales random components like dropout"""
+    """
+    eval mode this disbales random components like dropout"""
 
-model.eval()
-out = generate_text_simple(
-    model = model,
-    idx = encoded_tensor,
-    max_new_tokens = 6,
-    context_size=GPT_CONFIG_124M["context_length"]
-)
-print("Output:", out)
+    model.eval()
+    out = generate_text_simple(
+        model=model,
+        idx=encoded_tensor,
+        max_new_tokens=6,
+        context_size=GPT_CONFIG_124M["context_length"]
+    )
+    print("Output:", out)
 
-decoded_text = tokenizer.decode(out.squeeze(0).tolist())
+    decoded_text = tokenizer.decode(out.squeeze(0).tolist())
+    print("Decoded:", decoded_text)

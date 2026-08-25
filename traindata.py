@@ -3,7 +3,7 @@ import tokenizer
 import torch
 import torch.nn as nn
 from gptconfig import GPT_CONFIG_124M
-from embeddings import create_dataloader_v1
+from dataset1 import create_dataloader_v1
 
 path  = filepath
 with open(path, "r", encoding="utf-8") as file:
@@ -15,7 +15,7 @@ total_tokens = len(tokenizer.encode(text_data))
 train_ratio = 0.90
 split_idx = int(train_ratio * len(text_data))
 train_data = text_data[:split_idx]
-val_data = text_data[:split_idx:]
+val_data = text_data[split_idx:]
 
 
 torch.manual_seed(123)
