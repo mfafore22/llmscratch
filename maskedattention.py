@@ -11,7 +11,7 @@ class CausalAttention(nn.Module):
         self.dropout = nn.Dropout(dropout)
         self.register_buffer(
             'mask',
-            torch.triu(torch.ones(context.length, context_length),
+            torch.triu(torch.ones(context_length, context_length),
             diagonal=1)
         )
     
@@ -21,7 +21,7 @@ class CausalAttention(nn.Module):
         queries = self.W_query(x)
         values = self.W_value(x)
 
-        attn_scores = queries @ keys.tranpose(1, 2)
+        attn_scores = queries @ keys.transpose(1, 2)
         attn_scores.masked_fill_(
             self.mask.bool()[:num_tokens, :num_tokens], -torch.inf)
         attn_weights = torch.softmax(

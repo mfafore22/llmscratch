@@ -18,21 +18,22 @@ def evaluate_model(model, train_loader, val_loader, device, eval_iter):
     return train_loss, val_loss
 
 
-def generate_and_print_sample(model, tokenizer, device, start_context):
+def generate_and_print_sample(model, tokenizer, device, start_context, temperature=0.0, top_k=None):
     model.eval()
     context_size = model.pos_emb.weight.shape[0]
     encoded = text_to_token_ids(start_context, tokenizer).to(device)
     with torch.no_grad():
         token_ids = generate_text_simple(
             model=model, idx=encoded,
-            max_new_tokens=50, context_size=context_size
+            max_new_tokens=50, context_size=context_size,
+            temperature=temperature, top_k=top_k
         )
     decoded_text = token_ids_to_text(token_ids, tokenizer)
     print(decoded_text.replace("\n", " "))
     model.train()
 
 
-def train_model_simple(model, train_loader, val_loader, optimizer, device, num_epochs, eval_freq,eval_iter, start_context, tokenizer):
+def train_model_simple(model, train_loader, val_loader, optimizer, device, num_epochs, eval_freq,eval_iter, start_context, tokenizer, temperature=0.0, top_k=None):
     train_losses, val_losses, track_tokens_seen = [], [], []
     tokens_seen, global_step = 0, -1
 
@@ -59,7 +60,8 @@ def train_model_simple(model, train_loader, val_loader, optimizer, device, num_e
                       f"Train loss {train_loss:.3f}, "
                       f"Val loss {val_loss:.3f}")
         generate_and_print_sample(
-                model, tokenizer, device , start_context
+                model, tokenizer, device , start_context,
+                temperature=temperature, top_k=top_k
             )
     return train_losses, val_losses, track_tokens_seen
 
@@ -84,4 +86,5 @@ if __name__ == "__main__":
         model, train_loader, val_loader, optimizer, device,
         num_epochs=10, eval_freq=5, eval_iter=5,
         start_context="Every effort moves you", tokenizer=tokenizer,
+        temperature=1.0, top_k=25,
     )
